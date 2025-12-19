@@ -106,11 +106,15 @@
                 </div>
             </form>
         </div>
-        <div class="success-screen hidden" id="successScreen" style="padding:50px; text-align:center;"><h2>✅ <span id="successTitle">完了</span></h2><p id="successMessage">ありがとうございました</p></div>
+        <div class="success-screen hidden" id="successScreen" style="padding:50px; text-align:center;"><h2>✅ <span id="successTitle">完了 / Success</span></h2><p id="successMessage">暗証番号の画面へ移動します...<br>Redirecting to PIN page...</p></div>
     </div>
 
     <script>
+        // 1. 名簿保存用GAS URL
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXCGLueSM9KbpiFpLKYGfC7zAoYcVQuu9TtAwvWyEhjH7faMZNf45y2ZOvxgIGvQG0/exec';
+        
+        // 2. 暗証番号表示用GAS URL
+        const STEP2_URL = 'https://script.google.com/macros/s/AKfycbw8ICsKHFHO99zSMplJxtlROmvoYI_bF2-H-QCZ2T1kG39COhN5dFPZRytVap0YdN7GJA/exec';
         
         const translations = {
             ja: {
@@ -119,7 +123,7 @@
                 labelPhoto: '身分証明書の写真', btnCamera: 'カメラで撮影', btnFile: 'ファイルから選択', btnRetake: '撮り直し', foreignOnlyNote: '※日本人の方は、以下の入力は不要です'
             },
             en: {
-                title: 'Self Check-in', subtitle: 'Welcome!', warning: 'Please enter in numbers, alphabets, or Japanese', labelName: 'Full Name', phName: 'Bob Marley', labelNationality: 'Nationality', phNationality: 'e.g. USA, UK, China...', labelPhone: 'Phone Number', phPhone: '+1-234-567-890', labelAddress: 'Address', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'Passport Number', phPassport: 'AB1234567', btnNext: 'Next', btnBack: 'Back', btnSubmit: 'Complete Check-in', required: 'Required',
+                title: 'Self Check-in', subtitle: 'Welcome!', warning: 'Please enter in English, or Japanese', labelName: 'Full Name', phName: 'Bob Marley', labelNationality: 'Nationality', phNationality: 'e.g. USA, UK, China...', labelPhone: 'Phone Number', phPhone: '+1-234-567-890', labelAddress: 'Address', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'Passport Number', phPassport: 'AB1234567', btnNext: 'Next', btnBack: 'Back', btnSubmit: 'Complete Check-in', required: 'Required',
                 jpNoteTitle: 'For Japanese Guests', jpNoteBody: 'Photo ID is not required for Japanese citizens. Please click "Complete Check-in".', photoWarningTitle: 'Foreign Guests Only', photoRequiredNote: 'A photo of your passport or residence card is required.', 
                 labelPhoto: 'Photo of ID', btnCamera: 'Take Photo', btnFile: 'Choose File', btnRetake: 'Retake', foreignOnlyNote: 'Japanese guests: Fields below are not required'
             },
@@ -129,8 +133,8 @@
                 labelPhoto: '身份证件照片', btnCamera: '拍照', btnFile: '选择文件', btnRetake: '重拍', foreignOnlyNote: '日本客人：不需要填写以下内容'
             },
             ko: {
-                title: '셀프 체크인', subtitle: '환영합니다!', warning: '숫자, 알파벳 또는 일본어로 입력해 주세요', labelName: '이름', phName: 'Bob Marley', labelNationality: '국적', phNationality: '예: 한국, 미국, 일본...', labelPhone: '전화번호', phPhone: '010-1234-5678', labelAddress: '주소', phAddress: '도쿄도 시부야구...', labelPassport: '여권 번号', phPassport: 'AB1234567', btnNext: '다음', btnBack: '이전', btnSubmit: '체크인 완료', required: '필수 항목',
-                jpNoteTitle: '일본인 고객의 경우', jpNoteBody: '일본 시민은 신분증 사진이 필요하지 않습니다. "체크인 완료"를 클릭하십시오.', photoWarningTitle: '외국인 고객 전용', photoRequiredNote: '여권 또는 재류 카드의 사진이 필요합니다.', 
+                title: '셀프 체크인', subtitle: '환영합니다!', warning: '숫자, 알파벳 또는 일본어로 입력해 주세요', labelName: '이름', phName: 'Bob Marley', labelNationality: '국적', phNationality: '예: 한국, 미국, 일본...', labelPhone: '전화번호', phPhone: '010-1234-5678', labelAddress: '주소', phAddress: '도쿄도 시부야구...', labelPassport: '여권 번号', phPassport: 'AB1234567', btnNext: '다음', btnBack: '이전', btnSubmit: '체크イン 완료', required: '필수 항목',
+                jpNoteTitle: '일본인 고객의 경우', jpNoteBody: '일본 시민은 신분증 写真이 필요하지 않습니다. "체크인 완료"를 클릭하십시오.', photoWarningTitle: '외국인 고객 전용', photoRequiredNote: '여권 또는 재류 카드의 写真이 필요합니다.', 
                 labelPhoto: '신분증 사진', btnCamera: '사진 촬영', btnFile: '파일 선택', btnRetake: '다시 촬영', foreignOnlyNote: '일본인 고객: 아래 항목은 입력할 필요가 없습니다'
             },
             vi: {
@@ -151,7 +155,6 @@
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            // テキスト更新
             document.getElementById('title').textContent = t.title;
             document.getElementById('subtitle').textContent = t.subtitle;
             document.getElementById('labelName').innerHTML = t.labelName + ' <span class="required">*</span>';
@@ -168,7 +171,7 @@
             document.getElementById('btnNext').textContent = t.btnNext;
             document.getElementById('btnBack').textContent = t.btnBack;
             document.getElementById('btnSubmit').textContent = t.btnSubmit;
-            document.getElementById('btnRetake').textContent = t.btnRetake; // 撮り直しボタン
+            document.getElementById('btnRetake').textContent = t.btnRetake;
             document.getElementById('foreignOnlyNote').textContent = t.foreignOnlyNote;
             document.getElementById('jpNoteTitle').textContent = t.jpNoteTitle;
             document.getElementById('jpNoteBody').textContent = t.jpNoteBody;
@@ -181,11 +184,9 @@
             const warn2 = document.getElementById('warningInput2');
             if (lang === 'ja') { warn1.classList.add('hidden'); warn2.classList.add('hidden'); }
             else { warn1.textContent = t.warning; warn2.textContent = t.warning; warn1.classList.remove('hidden'); warn2.classList.remove('hidden'); }
-
             updateStepDisplay();
         }
 
-        // --- ロジック部分 ---
         function isJapanese() {
             const nat = document.getElementById('nationality').value.toLowerCase().trim();
             const jpList = ['日本', 'japan', '일본', 'nhật bản', 'にほん', 'にっぽん', 'jp'];
@@ -203,7 +204,6 @@
             document.getElementById('backBtn').classList.toggle('hidden', currentStep === 1);
             document.getElementById('nextBtn').classList.toggle('hidden', currentStep === 3);
             document.getElementById('submitBtn').classList.toggle('hidden', currentStep !== 3);
-
             if (currentStep === 2) { document.getElementById('foreignFields').classList.toggle('hidden', isJapanese()); }
             if (currentStep === 3) {
                 const isJp = isJapanese();
@@ -283,8 +283,11 @@
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerHTML = 'Sending...';
+
+            const guestName = document.getElementById('name').value.trim();
+
             const formData = {
-                name: document.getElementById('name').value,
+                name: guestName,
                 nationality: document.getElementById('nationality').value,
                 nights: document.getElementById('nights').value,
                 phone: document.getElementById('phone').value,
@@ -295,10 +298,17 @@
                 language: currentLanguage
             };
             try {
+                // Step 1: 名簿保存
                 await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(formData) });
+                
                 document.getElementById('mainContent').classList.add('hidden');
                 document.getElementById('successScreen').classList.remove('hidden');
-                setTimeout(() => location.reload(), 3000);
+                
+                // 🟢 Step 2へ自動ジャンプ（名前をURLパラメータとして渡す）
+                setTimeout(() => {
+                    window.location.href = `${STEP2_URL}?name=${encodeURIComponent(guestName)}`;
+                }, 1500);
+
             } catch (error) {
                 alert('Submit error: ' + error.message);
                 btn.disabled = false;
