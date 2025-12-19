@@ -112,13 +112,14 @@
     <script>
         // 設定
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxXCGLueSM9KbpiFpLKYGfC7zAoYcVQuu9TtAwvWyEhjH7faMZNf45y2ZOvxgIGvQG0/exec';
-        const STEP2_URL = 'https://script.google.com/macros/s/AKfycbw8ICsKHFHO99zSMplJxtlROmvoYI_bF2-H-QCZ2T1kG39COhN5dFPZRytVap0YdN7GJA/exec';
+        // 🟢 ここをご指定の最新URLに入れ替えました
+        const STEP2_URL = 'https://script.google.com/macros/s/AKfycbwlMQs1P0dpcfpl9KxwZ2G6cGrDKeNUTw3QFOm1wi8VA2zy6L-SmJLW05GEv38OV4Ukug/exec';
 
         const translations = {
             ja: { title: 'セルフチェックイン', subtitle: 'ようこそ！', warning: '', labelName: 'お名前', phName: '山田 太郎', labelNationality: '国籍', phNationality: '例：日本、アメリカ、中国...', labelPhone: '電話番号', phPhone: '090-1234-5678', labelAddress: 'ご住所', phAddress: '東京都渋谷区...', labelPassport: 'パスポート番号', phPassport: 'AB1234567', btnNext: '次へ', btnBack: '戻る', btnSubmit: 'チェックイン完了', required: '必須項目です', jpNoteTitle: '日本人の方へ', jpNoteBody: '身分証明書の写真撮影は不要です。「チェックイン完了」ボタンを押してください。', photoWarningTitle: '外国籍の方のみ', photoRequiredNote: 'パスポートまたは在留カードの写真が必要です', labelPhoto: '身分証明書の写真', btnCamera: 'カメラで撮影', btnFile: 'ファイルから選択', btnRetake: '撮り直し', foreignOnlyNote: '※日本人の方は、以下の入力は不要です' },
             en: { title: 'Self Check-in', subtitle: 'Welcome!', warning: 'Please enter in English, or Japanese', labelName: 'Full Name', phName: 'Bob Marley', labelNationality: 'Nationality', phNationality: 'e.g. USA, UK, China...', labelPhone: 'Phone Number', phPhone: '+1-234-567-890', labelAddress: 'Address', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'Passport Number', phPassport: 'AB1234567', btnNext: 'Next', btnBack: 'Back', btnSubmit: 'Complete Check-in', required: 'Required', jpNoteTitle: 'For Japanese Guests', jpNoteBody: 'Photo ID is not required for Japanese citizens. Please click "Complete Check-in".', photoWarningTitle: 'Foreign Guests Only', photoRequiredNote: 'A photo of your passport or residence card is required.', labelPhoto: 'Photo of ID', btnCamera: 'Take Photo', btnFile: 'Choose File', btnRetake: 'Retake', foreignOnlyNote: 'Japanese guests: Fields below are not required' },
             zh: { title: '自助入住', subtitle: '欢迎！', warning: '请输入数字、字母或日语', labelName: '姓名', phName: 'Bob Marley', labelNationality: '国籍', phNationality: '例如：中国、美国、日本...', labelPhone: '电话号码', phPhone: '138-0000-0000', labelAddress: '地址', phAddress: '东京都涩谷区...', labelPassport: '护照号码', phPassport: 'AB1234567', btnNext: '下一步', btnBack: '返回', btnSubmit: '完成入住', required: '必填项', jpNoteTitle: '日本籍客人', jpNoteBody: '日本公民不需要身份证照片。请点击“完成入住”。', photoWarningTitle: '仅限外国籍客人', photoRequiredNote: '需要护照或在留卡的照片。', labelPhoto: '身份证件照片', btnCamera: '拍照', btnFile: '选择文件', btnRetake: '重拍', foreignOnlyNote: '日本客人：不需要填写以下内容' },
-            ko: { title: '셀프 체크인', subtitle: '환영합니다!', warning: '숫자, 알파벳 또는 일본어로 입력해 주세요', labelName: '이름', phName: 'Bob Marley', labelNationality: '국적', phNationality: '예: 한국, 미국, 일본...', labelPhone: '전화번호', phPhone: '010-1234-5678', labelAddress: '주소', phAddress: '도쿄도 시부야구...', labelPassport: '여권 번号', phPassport: 'AB1234567', btnNext: '다음', btnBack: '이전', btnSubmit: '체크イン 완료', required: '필수 항목', jpNoteTitle: '일본인 고객の 경우', jpNoteBody: '일본 시민은 신분증 写真이 필요하지 않습니다. "체크인 완료"를 클릭하십시오.', photoWarningTitle: '외국인 고객 전용', photoRequiredNote: '여권 또는 재류 カートの 写真이 필요합니다.', labelPhoto: '신분증 사진', btnCamera: '사진 촬영', btnFile: '파일 선택', btnRetake: '다시 촬영', foreignOnlyNote: '일본인 고객: 아래 항목은 입력할 필요가 없습니다' },
+            ko: { title: '셀프 체크인', subtitle: '환영합니다!', warning: '숫자, 알파벳 또는 일본어로 입력해 주세요', labelName: '이름', phName: 'Bob Marley', labelNationality: '국적', phNationality: '예: 한국, 미국, 일본...', labelPhone: '전화번호', phPhone: '010-1234-5678', labelAddress: '주소', phAddress: '도쿄도 시부야구...', labelPassport: '여권 번号', phPassport: 'AB1234567', btnNext: '다음', btnBack: '이전', btnSubmit: '체크인 완료', required: '필수 항목', jpNoteTitle: '일본인 고객의 경우', jpNoteBody: '일본 시민은 신분증 사진이 필요하지 않습니다. "체크인 완료"를 클릭하십시오.', photoWarningTitle: '외국인 고객 전용', photoRequiredNote: '여권 또는 재류 카드의 사진이 필요합니다.', labelPhoto: '신분증 사진', btnCamera: '사진 촬영', btnFile: '파일 선택', btnRetake: '다시 촬영', foreignOnlyNote: '일본인 고객: 아래 항목은 입력할 필요가 없습니다' },
             vi: { title: 'Tự check-in', subtitle: 'Chào mừng!', warning: 'Vui lòng nhập bằng số, bảng chữ cái hoặc tiếng Nhật', labelName: 'Họ và Tên', phName: 'Bob Marley', labelNationality: 'Quốc tịch', phNationality: 'VD: Việt Nam, Mỹ, Nhật Bản...', labelPhone: 'Số điện thoại', phPhone: '090-1234-5678', labelAddress: 'Địa chỉ', phAddress: 'Tokyo-to, Shibuya-ku...', labelPassport: 'Số hộ chiếu', phPassport: 'AB1234567', btnNext: 'Tiếp theo', btnBack: 'Quay lại', btnSubmit: 'Hoàn tất', required: 'Bắt buộc', jpNoteTitle: 'Dành cho khách Nhật Bản', jpNoteBody: 'Công dân Nhật Bản không cần ảnh ID. Vui lòng nhấp vào "Hoàn tất".', photoWarningTitle: 'Chỉ dành cho khách nước ngoài', photoRequiredNote: 'Yêu cầu ảnh hộ chiếu hoặc thẻ ngoại kiều.', labelPhoto: 'Ảnh chụp giấy tờ tùy thân', btnCamera: 'Chụp ảnh', btnFile: 'Chọn tệp', btnRetake: 'Chụp lại', foreignOnlyNote: 'Khách Nhật Bản: Không cần điền các mục bên dưới' }
         };
 
@@ -254,14 +255,12 @@
             document.getElementById('cameraButtons').classList.remove('hidden');
         }
 
-        // 🟢 修正ポイント：名前の取得をジャンプ直前に行うように強化
         async function submitForm() {
             if (!validateCurrentStep()) return;
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerHTML = 'Sending...';
 
-            // 入力されている最新の名前を取得
             const guestName = document.getElementById('name').value.trim();
 
             const formData = {
@@ -277,14 +276,11 @@
             };
 
             try {
-                // 名簿をGASに送信
                 await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(formData) });
 
-                // 成功画面を表示
                 document.getElementById('mainContent').classList.add('hidden');
                 document.getElementById('successScreen').classList.remove('hidden');
 
-                // 1.5秒後に名前をつけてジャンプ
                 setTimeout(() => {
                     const finalJumpUrl = STEP2_URL + '?name=' + encodeURIComponent(guestName);
                     window.location.href = finalJumpUrl;
