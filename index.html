@@ -65,6 +65,12 @@
                     <div class="warning-box hidden" id="warningInput1"></div>
                     <div class="form-group"><label id="labelName">お名前 <span class="required">*</span></label><input type="text" id="name" placeholder="山田 太郎"><div class="error hidden" id="errorName"></div></div>
                     <div class="form-group"><label id="labelNationality">国籍 <span class="required">*</span></label><input type="text" id="nationality" placeholder="例：日本、アメリカ、中国..."><div class="error hidden" id="errorNationality"></div></div>
+                    <div class="form-group">
+    <label id="labelBirthdate">生年月日 <span class="required">*</span></label>
+    <input type="date" id="birthdate">
+    <div class="error hidden" id="errorBirthdate"></div>
+</div>
+
                     <div class="form-group"><label id="labelNights">宿泊日数 <span class="required">*</span></label><input type="number" id="nights" value="1" min="1"></div>
                 </div>
 
@@ -290,6 +296,7 @@
             const formData = {
                 name: guestName,
                 nationality: document.getElementById('nationality').value,
+                birthdate: document.getElementById('birthdate').value,
                 nights: document.getElementById('nights').value,
                 phone: document.getElementById('phone').value,
                 address: document.getElementById('address').value,
@@ -319,5 +326,6 @@
     </script>
 </body>
 </html>
+
 
 
