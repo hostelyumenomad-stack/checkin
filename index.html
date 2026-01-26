@@ -6,34 +6,35 @@
     <title>Self Check-in</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; color: #333; }
         .container { max-width: 500px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
         .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
-        .lang-selector { display: flex; justify-content: center; gap: 8px; padding: 15px; background: #f8f9fa; flex-wrap: wrap; }
-        .lang-btn { padding: 8px 12px; border: 2px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; }
+        .lang-selector { display: flex; justify-content: center; gap: 8px; padding: 15px; background: #f8f9fa; flex-wrap: wrap; border-bottom: 1px solid #eee; }
+        .lang-btn { padding: 8px 12px; border: 2px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.2s; }
         .lang-btn.active { background: #667eea; color: white; border-color: #667eea; }
         .content { padding: 25px; }
         .step-indicator { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
-        .step { width: 35px; height: 35px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2; position: relative; }
+        .step { width: 35px; height: 35px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2; position: relative; color: #666; }
         .step.active { background: #667eea; color: white; }
         .step-line { position: absolute; top: 17px; left: 35px; right: 35px; height: 2px; background: #e0e0e0; z-index: 1; }
         .form-group { margin-bottom: 18px; }
-        label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; }
-        .required { color: #e74c3c; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; outline: none; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #444; }
+        .required { color: #e74c3c; margin-left: 2px; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; outline: none; transition: border-color 0.2s; }
         input:focus { border-color: #667eea; }
-        .error { color: #e74c3c; font-size: 12px; margin-top: 4px; }
+        .error { color: #e74c3c; font-size: 12px; margin-top: 4px; font-weight: bold; }
         .btn-group { display: flex; gap: 10px; margin-top: 25px; }
         button { flex: 1; padding: 15px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
         .btn-primary { background: #667eea; color: white; }
         .btn-secondary { background: #f0f0f0; color: #333; }
         .btn-success { background: #27ae60; color: white; }
         button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .hidden { display: none; }
-        .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 5px; margin: 15px 0; font-size: 13px; }
-        video, .preview-image { width: 100%; border-radius: 10px; margin: 10px 0; background: #000; }
+        .hidden { display: none !important; }
+        .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 5px; margin: 15px 0; font-size: 13px; color: #856404; }
+        video, .preview-image { width: 100%; border-radius: 10px; margin: 10px 0; background: #000; display: block; }
         .camera-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        .camera-btn { padding: 15px; border: 2px dashed #667eea; background: #f8f9ff; border-radius: 10px; cursor: pointer; text-align: center; font-size: 14px; }
+        .camera-btn { padding: 15px; border: 2px dashed #667eea; background: #f8f9ff; border-radius: 10px; cursor: pointer; text-align: center; font-size: 14px; color: #667eea; font-weight: 600; }
+        .success-screen { padding: 60px 20px; text-align: center; }
     </style>
 </head>
 <body>
@@ -59,21 +60,21 @@
                 <div class="step" id="step3">3</div>
             </div>
 
-            <form id="checkinForm">
+            <form id="checkinForm" onsubmit="return false;">
                 <!-- STEP 1: 基本情報 -->
                 <div id="stepContent1">
                     <div class="form-group">
-                        <label id="labelName">お名前 <span class="required">*</span></label>
+                        <label id="labelName">お名前</label>
                         <input type="text" id="name" placeholder="山田 太郎">
                         <div class="error hidden" id="errorName"></div>
                     </div>
                     <div class="form-group">
-                        <label id="labelNationality">国籍 <span class="required">*</span></label>
-                        <input type="text" id="nationality" placeholder="例: 日本, USA, China...">
+                        <label id="labelNationality">国籍</label>
+                        <input type="text" id="nationality" placeholder="例: 日本, Japan, 中国...">
                         <div class="error hidden" id="errorNationality"></div>
                     </div>
                     <div class="form-group">
-                        <label id="labelBirthdate">生年月日 <span class="required">*</span></label>
+                        <label id="labelBirthdate">生年月日</label>
                         <input type="date" id="birthdate">
                         <div class="error hidden" id="errorBirthdate"></div>
                     </div>
@@ -82,16 +83,16 @@
                 <!-- STEP 2: 連絡先・宿泊情報 -->
                 <div id="stepContent2" class="hidden">
                     <div class="form-group">
-                        <label id="labelNights">宿泊数 <span class="required">*</span></label>
+                        <label id="labelNights">宿泊数</label>
                         <input type="number" id="nights" value="1" min="1">
                     </div>
                     <div class="form-group">
-                        <label id="labelPhone">電話番号 <span class="required">*</span></label>
+                        <label id="labelPhone">電話番号</label>
                         <input type="tel" id="phone" placeholder="090-1234-5678">
                         <div class="error hidden" id="errorPhone"></div>
                     </div>
                     <div class="form-group">
-                        <label id="labelAddress">住所 <span class="required">*</span></label>
+                        <label id="labelAddress">住所</label>
                         <input type="text" id="address" placeholder="東京都渋谷区...">
                         <div class="error hidden" id="errorAddress"></div>
                     </div>
@@ -110,12 +111,12 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label id="labelPassport">パスポート/身分証番号 <span class="required">*</span></label>
+                            <label id="labelPassport">パスポート/身分証番号</label>
                             <input type="text" id="passportNumber" placeholder="AB1234567">
                             <div class="error hidden" id="errorPassport"></div>
                         </div>
                         <div class="form-group">
-                            <label id="labelPhoto">身分証の写真 <span class="required">*</span></label>
+                            <label id="labelPhoto">身分証の写真</label>
                             <div class="camera-buttons" id="cameraButtons">
                                 <div class="camera-btn" onclick="startCamera()">📷 <span id="btnCamera">Camera</span></div>
                                 <div class="camera-btn" onclick="document.getElementById('fileInput').click()">📁 <span id="btnFile">File</span></div>
@@ -123,7 +124,7 @@
                             <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="handleFileUpload(event)">
                             <video id="video" class="hidden" autoplay playsinline></video>
                             <button type="button" id="captureBtn" class="btn-primary hidden" onclick="capturePhoto()">📸 Capture</button>
-                            <img id="preview" class="preview-image hidden">
+                            <img id="preview" class="preview-image hidden" alt="Preview">
                             <button type="button" id="retakeBtn" class="btn-secondary hidden" onclick="retakePhoto()">🔄 Retake</button>
                             <div class="error hidden" id="errorPhoto"></div>
                         </div>
@@ -140,16 +141,16 @@
                 </div>
             </form>
         </div>
-        <div class="success-screen hidden" id="successScreen" style="padding:60px; text-align:center;">
+
+        <div class="success-screen hidden" id="successScreen">
             <h2 style="color: #27ae60; margin-bottom: 20px;">✅ Thank you!</h2>
             <p id="successMsg">チェックインが完了しました。<br>完了画面へ移動します...</p>
         </div>
     </div>
 
     <script>
-        // ★重要：ここに新しいGASのWebアプリURLを貼ってくれ
+        // 設定
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxqqDedpsTIbGdtXhVouI4se9ZsV07gR19onY1UjbDBHPE7ODEW_R_5zqBuMHgxZs2x/exec';
-        // 次の遷移先（暗証番号など）
         const NEXT_PAGE_URL = 'https://script.google.com/macros/s/AKfycbwxIJmU0kZMeMhaUcp2QsCLHv74Eujg-c9H1vBKvDEgwZd_Tri4mb-hJcb69fDrID_-Sw/exec';
 
         const translations = {
@@ -163,7 +164,7 @@
                 title: '自助入住', labelName: '姓名', labelNationality: '国籍', labelBirthdate: '出生日期', labelNights: '入住晚数', labelPhone: '电话号码', labelAddress: '地址', labelDocType: '证件类型', labelPassport: '护照号码', labelPhoto: '证件照片', btnNext: '下一步', btnBack: '返回', btnSubmit: '完成入住', required: '必填', noteId: '外国籍旅客需要拍摄证件。', noteJp: '日本籍旅客无需拍摄。直接点击完成。', btnCamera: '相机', btnFile: '文件'
             },
             ko: {
-                title: '셀프 체크인', labelName: '성함', labelNationality: '국적', labelBirthdate: '생년월일', labelNights: '숙박 일수', labelPhone: '전화번호', labelAddress: '주소', labelDocType: '신분증 종류', labelPassport: '여권 번호', labelPhoto: '신분증 사진', btnNext: '다음', btnBack: '이전', btnSubmit: '체크인 완료', required: '필수 항목', noteId: '외국인 고객님은 신분증 촬영이 필요합니다.', noteJp: '일본인 고객님은 촬영이 필요 없습니다. 완료를 눌러주세요.', btnCamera: '카메라', btnFile: '파일'
+                title: '셀프 체크인', labelName: '성함', labelNationality: '국적', labelBirthdate: '생년월일', labelNights: '숙박 일수', labelPhone: '전화번호', labelAddress: '주소', labelDocType: '신분증 종류', labelPassport: '여권 번호', labelPhoto: '신분증 사진', btnNext: '다음', btnBack: '이전', btnSubmit: '체크イン 완료', required: '필수 항목', noteId: '외국인 고객님은 신분증 촬영이 필요합니다.', noteJp: '일본인 고객님은 촬영이 필요 없습니다. 완료를 눌러주세요.', btnCamera: '카메라', btnFile: '파일'
             },
             vi: {
                 title: 'Tự check-in', labelName: 'Họ và tên', labelNationality: 'Quốc tịch', labelBirthdate: 'Ngày sinh', labelNights: 'Số đêm', labelPhone: 'Số điện thoại', labelAddress: 'Địa chỉ', labelDocType: 'Loại giấy tờ', labelPassport: 'Số hộ chiếu', labelPhoto: 'Ảnh ID', btnNext: 'Tiếp theo', btnBack: 'Quay lại', btnSubmit: 'Hoàn tất', required: 'Bắt buộc', noteId: 'Khách nước ngoài cần chụp ảnh ID.', noteJp: 'Khách Nhật không cần chụp ảnh. Nhấn Hoàn tất.', btnCamera: 'Máy ảnh', btnFile: 'Tệp'
@@ -183,19 +184,24 @@
 
             document.getElementById('title').textContent = t.title;
             const ids = ['labelName', 'labelNationality', 'labelBirthdate', 'labelNights', 'labelPhone', 'labelAddress', 'labelDocType', 'labelPassport', 'labelPhoto', 'btnNext', 'btnBack', 'btnSubmit', 'noteId', 'noteJp', 'btnCamera', 'btnFile'];
+            
             ids.forEach(id => {
-                if (document.getElementById(id)) {
-                    const el = document.getElementById(id);
-                    if (el.tagName === 'SPAN' || el.tagName === 'BUTTON') el.textContent = t[id];
-                    else if (id.startsWith('label')) el.innerHTML = `${t[id]} <span class="required">*</span>`;
-                    else el.textContent = t[id];
+                const el = document.getElementById(id);
+                if (el) {
+                    if (id.startsWith('label')) {
+                        el.innerHTML = `${t[id]} <span class="required">*</span>`;
+                    } else if (el.tagName === 'SPAN') {
+                        el.textContent = t[id];
+                    } else {
+                        el.textContent = t[id];
+                    }
                 }
             });
         }
 
         function isJapanese() {
             const val = document.getElementById('nationality').value.toLowerCase().trim();
-            const jpList = ['日本', 'japan', '일본', 'nhật bản', 'にほん', 'にっぽん', 'jp'];
+            const jpList = ['日本', 'japan', '일본', 'nhật bản', 'にほん', 'にっぽん', 'jp', 'japanese'];
             return jpList.includes(val);
         }
 
@@ -260,22 +266,32 @@
                 video.classList.remove('hidden');
                 document.getElementById('captureBtn').classList.remove('hidden');
                 document.getElementById('cameraButtons').classList.add('hidden');
-            } catch (err) { alert('Camera Error: ' + err.message); }
+                document.getElementById('errorPhoto').classList.add('hidden');
+            } catch (err) {
+                alert('Camera Error: Please allow camera access or use File upload.');
+            }
         }
 
         function capturePhoto() {
             const video = document.getElementById('video');
             const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            canvas.getContext('2d').drawImage(video, 0, 0);
-            capturedImage = canvas.toDataURL('image/jpeg', 0.8);
+            // 解像度をある程度抑えて送信サイズを節約
+            const scale = 800 / Math.max(video.videoWidth, video.videoHeight);
+            canvas.width = video.videoWidth * scale;
+            canvas.height = video.videoHeight * scale;
+            
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            capturedImage = canvas.toDataURL('image/jpeg', 0.7);
+            
             document.getElementById('preview').src = capturedImage;
             document.getElementById('preview').classList.remove('hidden');
             document.getElementById('retakeBtn').classList.remove('hidden');
             video.classList.add('hidden');
             document.getElementById('captureBtn').classList.add('hidden');
-            if (videoStream) videoStream.getTracks().forEach(t => t.stop());
+            
+            if (videoStream) {
+                videoStream.getTracks().forEach(t => t.stop());
+            }
         }
 
         function handleFileUpload(e) {
@@ -288,6 +304,7 @@
                     document.getElementById('preview').classList.remove('hidden');
                     document.getElementById('retakeBtn').classList.remove('hidden');
                     document.getElementById('cameraButtons').classList.add('hidden');
+                    document.getElementById('errorPhoto').classList.add('hidden');
                 };
                 reader.readAsDataURL(file);
             }
@@ -299,13 +316,17 @@
             document.getElementById('retakeBtn').classList.add('hidden');
             document.getElementById('cameraButtons').classList.remove('hidden');
             document.getElementById('fileInput').value = "";
+            const video = document.getElementById('video');
+            video.classList.add('hidden');
         }
 
         async function submitForm() {
             if (!validateStep()) return;
+            
             const btn = document.getElementById('submitBtn');
+            const originalText = btn.textContent;
             btn.disabled = true;
-            btn.textContent = "Wait...";
+            btn.textContent = "...";
 
             const payload = {
                 name: document.getElementById('name').value,
@@ -317,29 +338,39 @@
                 documentType: document.getElementById('documentType').value,
                 passportNumber: document.getElementById('passportNumber').value,
                 documentImage: capturedImage,
-                language: currentLanguage
+                language: currentLanguage,
+                timestamp: new Date().toISOString()
             };
 
             try {
-                // GASへ送信
+                // Google Apps ScriptへPOST
                 await fetch(GAS_URL, {
                     method: 'POST',
                     mode: 'no-cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
 
+                // 成功表示
                 document.getElementById('mainContent').classList.add('hidden');
                 document.getElementById('successScreen').classList.remove('hidden');
 
+                // 1.5秒後にリダイレクト
                 setTimeout(() => {
                     window.location.href = `${NEXT_PAGE_URL}?name=${encodeURIComponent(payload.name)}`;
                 }, 1500);
+
             } catch (err) {
-                alert('Submit Error: ' + err.message);
+                console.error(err);
+                alert('Submit Error. Please try again.');
                 btn.disabled = false;
-                btn.textContent = translations[currentLanguage].btnSubmit;
+                btn.textContent = originalText;
             }
         }
+
+        // 初期言語セットアップ
+        window.onload = () => changeLanguage('ja', document.querySelector('.lang-btn.active'));
     </script>
 </body>
 </html>
