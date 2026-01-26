@@ -1,49 +1,46 @@
-
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>セルフチェックイン</title>
+    <title>Self Check-in</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
         .container { max-width: 500px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; }
         .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
-        .header h1 { font-size: 28px; margin-bottom: 5px; }
-        .header p { opacity: 0.9; font-size: 16px; }
-        .lang-selector { display: flex; justify-content: center; gap: 10px; padding: 20px; background: #f8f9fa; flex-wrap: wrap; }
-        .lang-btn { padding: 10px 20px; border: 2px solid #ddd; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; font-size: 14px; }
+        .lang-selector { display: flex; justify-content: center; gap: 8px; padding: 15px; background: #f8f9fa; flex-wrap: wrap; }
+        .lang-btn { padding: 8px 12px; border: 2px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; }
         .lang-btn.active { background: #667eea; color: white; border-color: #667eea; }
-        .content { padding: 30px; }
-        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 30px; position: relative; }
-        .step { width: 40px; height: 40px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2; position: relative; }
+        .content { padding: 25px; }
+        .step-indicator { display: flex; justify-content: space-between; margin-bottom: 25px; position: relative; }
+        .step { width: 35px; height: 35px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center; font-weight: bold; z-index: 2; position: relative; }
         .step.active { background: #667eea; color: white; }
-        .step-line { position: absolute; top: 20px; left: 40px; right: 40px; height: 2px; background: #e0e0e0; z-index: 1; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        .step-line { position: absolute; top: 17px; left: 35px; right: 35px; height: 2px; background: #e0e0e0; z-index: 1; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #333; }
         .required { color: #e74c3c; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; }
-        .error { color: #e74c3c; font-size: 12px; margin-top: 5px; }
-        .btn-group { display: flex; gap: 10px; margin-top: 30px; }
-        button { flex: 1; padding: 15px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        input, select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; outline: none; }
+        input:focus { border-color: #667eea; }
+        .error { color: #e74c3c; font-size: 12px; margin-top: 4px; }
+        .btn-group { display: flex; gap: 10px; margin-top: 25px; }
+        button { flex: 1; padding: 15px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
         .btn-primary { background: #667eea; color: white; }
         .btn-secondary { background: #f0f0f0; color: #333; }
         .btn-success { background: #27ae60; color: white; }
-        .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 5px; margin: 20px 0; font-size: 14px; }
-        .warning-box { background: #fdeaea; border: 1px solid #ebccd1; color: #a94442; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; font-weight: bold; text-align: center; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
         .hidden { display: none; }
-        video, .preview-image { width: 100%; border-radius: 10px; margin: 10px 0; }
-        .camera-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .camera-btn { padding: 15px; border: 2px dashed #667eea; background: #f8f9ff; border-radius: 10px; cursor: pointer; text-align: center; }
+        .note { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 5px; margin: 15px 0; font-size: 13px; }
+        video, .preview-image { width: 100%; border-radius: 10px; margin: 10px 0; background: #000; }
+        .camera-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .camera-btn { padding: 15px; border: 2px dashed #667eea; background: #f8f9ff; border-radius: 10px; cursor: pointer; text-align: center; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1 id="title">セルフチェックイン</h1>
-            <p id="subtitle">ようこそ！</p>
+            <p id="subtitle">Self Check-in</p>
         </div>
 
         <div class="lang-selector">
@@ -63,85 +60,113 @@
             </div>
 
             <form id="checkinForm">
+                <!-- STEP 1: 基本情報 -->
                 <div id="stepContent1">
-                    <div class="warning-box hidden" id="warningInput1"></div>
-                    <div class="form-group"><label id="labelName">お名前 <span class="required">*</span></label><input type="text" id="name" placeholder="山田 太郎"><div class="error hidden" id="errorName"></div></div>
-                    <div class="form-group"><label id="labelNationality">国籍 <span class="required">*</span></label><input type="text" id="nationality" placeholder="例：日本、アメリカ、中国..."><div class="error hidden" id="errorNationality"></div></div>
-                    <div class="form-group"><label id="labelNights">宿泊日数 <span class="required">*</span></label><input type="number" id="nights" value="1" min="1"></div>
-                </div>
-
-                <div id="stepContent2" class="hidden">
-                    <div class="warning-box hidden" id="warningInput2"></div>
-                    <div class="form-group"><label id="labelPhone">電話番号 <span class="required">*</span></label><input type="tel" id="phone" placeholder="090-1234-5678"><div class="error hidden" id="errorPhone"></div></div>
-                    <div class="form-group"><label id="labelAddress">ご住所 <span class="required">*</span></label><input type="text" id="address" placeholder="東京都渋谷区..."><div class="error hidden" id="errorAddress"></div></div>
-                    <div id="foreignFields" class="hidden">
-                        <div class="note">ℹ️ <span id="foreignOnlyNote">※日本人の方は、以下の入力は不要です</span></div>
-                        <div class="form-group"><label id="labelDocType">身分証明書の種類</label><select id="documentType"><option value="passport">パスポート / Passport</option><option value="residenceCard">在留カード / Residence Card</option></select></div>
-                        <div class="form-group"><label id="labelPassport">パスポート番号 <span class="required">*</span></label><input type="text" id="passportNumber" placeholder="AB1234567"><div class="error hidden" id="errorPassport"></div></div>
+                    <div class="form-group">
+                        <label id="labelName">お名前 <span class="required">*</span></label>
+                        <input type="text" id="name" placeholder="山田 太郎">
+                        <div class="error hidden" id="errorName"></div>
+                    </div>
+                    <div class="form-group">
+                        <label id="labelNationality">国籍 <span class="required">*</span></label>
+                        <input type="text" id="nationality" placeholder="例: 日本, USA, China...">
+                        <div class="error hidden" id="errorNationality"></div>
+                    </div>
+                    <div class="form-group">
+                        <label id="labelBirthdate">生年月日 <span class="required">*</span></label>
+                        <input type="date" id="birthdate">
+                        <div class="error hidden" id="errorBirthdate"></div>
                     </div>
                 </div>
 
+                <!-- STEP 2: 連絡先・宿泊情報 -->
+                <div id="stepContent2" class="hidden">
+                    <div class="form-group">
+                        <label id="labelNights">宿泊数 <span class="required">*</span></label>
+                        <input type="number" id="nights" value="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label id="labelPhone">電話番号 <span class="required">*</span></label>
+                        <input type="tel" id="phone" placeholder="090-1234-5678">
+                        <div class="error hidden" id="errorPhone"></div>
+                    </div>
+                    <div class="form-group">
+                        <label id="labelAddress">住所 <span class="required">*</span></label>
+                        <input type="text" id="address" placeholder="東京都渋谷区...">
+                        <div class="error hidden" id="errorAddress"></div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: 本人確認 -->
                 <div id="stepContent3" class="hidden">
-                    <div id="japaneseNote" class="note hidden">✅ <strong><span id="jpNoteTitle">日本人の方へ</span></strong><br><br><span id="jpNoteBody">身分証明書の写真撮影は不要です。「チェックイン完了」ボタンを押してください。</span></div>
-                    <div id="photoSection" class="hidden">
-                        <div class="note" style="background: #fff3e0; border-left-color: #ff9800;">⚠️ <strong><span id="photoWarningTitle">外国籍の方のみ</span></strong><br><span id="photoRequiredNote">パスポートまたは在留カードの写真が必要です</span></div>
+                    <div id="foreignFields">
+                        <div class="note">ℹ️ <span id="noteId">外国籍の方はパスポート等の撮影が必要です。</span></div>
                         <div class="form-group">
-                            <label id="labelPhoto">身分証明書の写真 <span class="required">*</span></label>
+                            <label id="labelDocType">証明書の種類</label>
+                            <select id="documentType">
+                                <option value="Passport">Passport</option>
+                                <option value="Residence Card">Residence Card</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label id="labelPassport">パスポート/身分証番号 <span class="required">*</span></label>
+                            <input type="text" id="passportNumber" placeholder="AB1234567">
+                            <div class="error hidden" id="errorPassport"></div>
+                        </div>
+                        <div class="form-group">
+                            <label id="labelPhoto">身分証の写真 <span class="required">*</span></label>
                             <div class="camera-buttons" id="cameraButtons">
-                                <div class="camera-btn" onclick="startCamera()">📷<br><span id="btnCamera">カメラで撮影</span></div>
-                                <div class="camera-btn" onclick="document.getElementById('fileInput').click()">📁<br><span id="btnFile">ファイルから選択</span></div>
+                                <div class="camera-btn" onclick="startCamera()">📷 <span id="btnCamera">Camera</span></div>
+                                <div class="camera-btn" onclick="document.getElementById('fileInput').click()">📁 <span id="btnFile">File</span></div>
                             </div>
                             <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="handleFileUpload(event)">
                             <video id="video" class="hidden" autoplay playsinline></video>
-                            <button type="button" id="captureBtn" class="btn-primary hidden" onclick="capturePhoto()">📸 <span id="btnCapture">撮影</span></button>
+                            <button type="button" id="captureBtn" class="btn-primary hidden" onclick="capturePhoto()">📸 Capture</button>
                             <img id="preview" class="preview-image hidden">
-                            <button type="button" id="retakeBtn" class="btn-secondary hidden" onclick="retakePhoto()">🔄 <span id="btnRetake">撮り直し</span></button>
+                            <button type="button" id="retakeBtn" class="btn-secondary hidden" onclick="retakePhoto()">🔄 Retake</button>
                             <div class="error hidden" id="errorPhoto"></div>
                         </div>
+                    </div>
+                    <div id="japaneseNote" class="note hidden">
+                        ✅ <span id="noteJp">日本人の方は写真撮影不要です。「チェックイン完了」を押してください。</span>
                     </div>
                 </div>
 
                 <div class="btn-group">
-                    <button type="button" class="btn-secondary hidden" id="backBtn" onclick="previousStep()">← <span id="btnBack">戻る</span></button>
-                    <button type="button" class="btn-primary" id="nextBtn" onclick="nextStep()"><span id="btnNext">次へ</span> →</button>
-                    <button type="button" class="btn-success hidden" id="submitBtn" onclick="submitForm()">✓ <span id="btnSubmit">チェックイン完了</span></button>
+                    <button type="button" class="btn-secondary hidden" id="backBtn" onclick="previousStep()">← <span id="btnBack">Back</span></button>
+                    <button type="button" class="btn-primary" id="nextBtn" onclick="nextStep()"><span id="btnNext">Next</span> →</button>
+                    <button type="button" class="btn-success hidden" id="submitBtn" onclick="submitForm()">✓ <span id="btnSubmit">Finish</span></button>
                 </div>
             </form>
         </div>
-        <div class="success-screen hidden" id="successScreen" style="padding:50px; text-align:center;"><h2>✅ <span id="successTitle">完了 / Success</span></h2><p id="successMessage">暗証番号の画面へ移動します...<br>Redirecting to PIN page...</p></div>
+        <div class="success-screen hidden" id="successScreen" style="padding:60px; text-align:center;">
+            <h2 style="color: #27ae60; margin-bottom: 20px;">✅ Thank you!</h2>
+            <p id="successMsg">チェックインが完了しました。<br>完了画面へ移動します...</p>
+        </div>
     </div>
 
     <script>
-        // ★ Telegram通知が含まれる最新のGAS URLに差し替え済みです
+        // ★重要：ここに新しいGASのWebアプリURLを貼ってくれ
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbxqqDedpsTIbGdtXhVouI4se9ZsV07gR19onY1UjbDBHPE7ODEW_R_5zqBuMHgxZs2x/exec';
-        
-        const STEP2_URL = 'https://script.google.com/macros/s/AKfycbwxIJmU0kZMeMhaUcp2QsCLHv74Eujg-c9H1vBKvDEgwZd_Tri4mb-hJcb69fDrID_-Sw/exec';
-        
+        // 次の遷移先（暗証番号など）
+        const NEXT_PAGE_URL = 'https://script.google.com/macros/s/AKfycbwxIJmU0kZMeMhaUcp2QsCLHv74Eujg-c9H1vBKvDEgwZd_Tri4mb-hJcb69fDrID_-Sw/exec';
+
         const translations = {
             ja: {
-                title: 'セルフチェックイン', subtitle: 'ようこそ！', warning: '', labelName: 'お名前', phName: '山田 太郎', labelNationality: '国籍', phNationality: '例：日本、アメリカ、中国...', labelNights: '宿泊日数', labelPhone: '電話番号', phPhone: '090-1234-5678', labelAddress: 'ご住所', phAddress: '東京都渋谷区...', labelPassport: 'パスポート番号', phPassport: 'AB1234567', btnNext: '次へ', btnBack: '戻る', btnSubmit: 'チェックイン完了', required: '必須項目です',
-                jpNoteTitle: '日本人の方へ', jpNoteBody: '身分証明書の写真撮影は不要です。「チェックイン完了」ボタンを押してください。', photoWarningTitle: '外国籍の方のみ', photoRequiredNote: 'パスポートまたは在留カードの写真が必要です', 
-                labelPhoto: '身分証明書の写真', btnCamera: 'カメラで撮影', btnFile: 'ファイルから選択', btnCapture: '撮影', btnRetake: '撮り直し', foreignOnlyNote: '※日本人の方は、以下の入力は不要です'
+                title: 'セルフチェックイン', labelName: 'お名前', labelNationality: '国籍', labelBirthdate: '生年月日', labelNights: '宿泊数', labelPhone: '電話番号', labelAddress: '住所', labelDocType: '証明書の種類', labelPassport: 'パスポート番号', labelPhoto: '身分証の写真', btnNext: '次へ', btnBack: '戻る', btnSubmit: 'チェックイン完了', required: '必須項目です', noteId: '外国籍の方は身分証の撮影が必要です。', noteJp: '日本人の方は写真撮影不要です。そのまま完了ボタンを押してください。', btnCamera: 'カメラ', btnFile: 'ファイル'
             },
             en: {
-                title: 'Self Check-in', subtitle: 'Welcome!', warning: 'Please enter in English, or Japanese', labelName: 'Full Name', phName: 'Bob Marley', labelNationality: 'Nationality', phNationality: 'e.g. USA, UK, China...', labelNights: 'Number of Nights', labelPhone: 'Phone Number', phPhone: '+1-234-567-890', labelAddress: 'Address', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'Passport Number', phPassport: 'AB1234567', btnNext: 'Next', btnBack: 'Back', btnSubmit: 'Complete Check-in', required: 'Required',
-                jpNoteTitle: 'For Japanese Guests', jpNoteBody: 'Photo ID is not required for Japanese citizens. Please click "Complete Check-in".', photoWarningTitle: 'Foreign Guests Only', photoRequiredNote: 'A photo of your passport or residence card is required.', 
-                labelPhoto: 'Photo of ID', btnCamera: 'Take Photo', btnFile: 'Choose File', btnCapture: 'Capture', btnRetake: 'Retake', foreignOnlyNote: 'Japanese guests: Fields below are not required'
+                title: 'Self Check-in', labelName: 'Full Name', labelNationality: 'Nationality', labelBirthdate: 'Birthdate', labelNights: 'Nights', labelPhone: 'Phone Number', labelAddress: 'Address', labelDocType: 'Document Type', labelPassport: 'Passport Number', labelPhoto: 'ID Photo', btnNext: 'Next', btnBack: 'Back', btnSubmit: 'Complete', required: 'Required', noteId: 'Non-Japanese guests are required to take a photo of ID.', noteJp: 'Japanese citizens do not need an ID photo. Click "Complete".', btnCamera: 'Camera', btnFile: 'File'
             },
             zh: {
-                title: '自助入住', subtitle: '欢迎！', warning: '请输入数字、字母或日语', labelName: '姓名', phName: 'Bob Marley', labelNationality: '国籍', phNationality: '例如：中国、美国、日本...', labelNights: '入住晚数', labelPhone: '电话号码', phPhone: '138-0000-0000', labelAddress: '地址', phAddress: '东京都涩谷区...', labelPassport: '护照号码', phPassport: 'AB1234567', btnNext: '下一步', btnBack: '返回', btnSubmit: '完成入住', required: '必填项',
-                jpNoteTitle: '日本籍客人', jpNoteBody: '日本公民不需要身份证照片。请点击“完成入住”。', photoWarningTitle: '仅限外国籍客人', photoRequiredNote: '需要护照或在留卡的照片。', 
-                labelPhoto: '身份证件照片', btnCamera: '拍照', btnFile: '选择文件', btnCapture: '拍照', btnRetake: '重拍', foreignOnlyNote: '日本客人：不需要填写以下内容'
+                title: '自助入住', labelName: '姓名', labelNationality: '国籍', labelBirthdate: '出生日期', labelNights: '入住晚数', labelPhone: '电话号码', labelAddress: '地址', labelDocType: '证件类型', labelPassport: '护照号码', labelPhoto: '证件照片', btnNext: '下一步', btnBack: '返回', btnSubmit: '完成入住', required: '必填', noteId: '外国籍旅客需要拍摄证件。', noteJp: '日本籍旅客无需拍摄。直接点击完成。', btnCamera: '相机', btnFile: '文件'
             },
             ko: {
-                title: '셀프 체크인', subtitle: '환영합니다!', warning: '숫자, 알파벳 또는 일본어로 입력해 주세요', labelName: '이름', phName: 'Bob Marley', labelNationality: '국적', phNationality: '예: 한국, 미국, 일본...', labelNights: '숙박 일수', labelPhone: '전화번호', phPhone: '010-1234-5678', labelAddress: '주소', phAddress: '도쿄도 시부야구...', labelPassport: '여권 번号', phPassport: 'AB1234567', btnNext: '다음', btnBack: '이전', btnSubmit: '체크인 완료', required: '필수 항목',
-                jpNoteTitle: '일본인 고객의 경우', jpNoteBody: '일본 시민은 신분증 사진이 필요하지 않습니다. "체크인 완료"를 클릭하십시오.', photoWarningTitle: '외국인 고객 전용', photoRequiredNote: '여권 또는 재류 카드의 사진이 필요합니다.', 
-                labelPhoto: '신분증 사진', btnCamera: '사진 촬영', btnFile: '파일 선택', btnCapture: '촬영', btnRetake: '다시 촬영', foreignOnlyNote: '일본인 고객: 아래 항목은 입력할 필요가 없습니다'
+                title: '셀프 체크인', labelName: '성함', labelNationality: '국적', labelBirthdate: '생년월일', labelNights: '숙박 일수', labelPhone: '전화번호', labelAddress: '주소', labelDocType: '신분증 종류', labelPassport: '여권 번호', labelPhoto: '신분증 사진', btnNext: '다음', btnBack: '이전', btnSubmit: '체크인 완료', required: '필수 항목', noteId: '외국인 고객님은 신분증 촬영이 필요합니다.', noteJp: '일본인 고객님은 촬영이 필요 없습니다. 완료를 눌러주세요.', btnCamera: '카메라', btnFile: '파일'
             },
             vi: {
-                title: 'Tự check-in', subtitle: 'Chào mừng!', warning: 'Vui lòng nhập bằng số, bảng chữ cái hoặc tiếng Nhật', labelName: 'Họ và Tên', phName: 'Bob Marley', labelNationality: 'Quốc tịch', phNationality: 'VD: Việt Nam, Mỹ, Nhật Bản...', labelNights: 'Số đêm lưu trú', labelPhone: 'Số điện thoại', phPhone: '090-1234-5678', labelAddress: 'Địa chỉ', phAddress: 'Tokyo-to, Shibuya-ku...', labelPassport: 'Số hộ chiếu', phPassport: 'AB1234567', btnNext: 'Tiếp theo', btnBack: 'Quay lại', btnSubmit: 'Hoàn tất', required: 'Bắt buộc',
-                jpNoteTitle: 'Dành cho khách Nhật Bản', jpNoteBody: 'Công dân Nhật Bản không cần ảnh ID. Vui lòng nhấp vào "Hoàn tất".', photoWarningTitle: 'Chỉ dành cho khách nước ngoài', photoRequiredNote: 'Yêu cầu ảnh hộ chiếu hoặc thẻ ngoại kiều.', 
-                labelPhoto: 'Ảnh chụp giấy tờ tùy thân', btnCamera: 'Chụp ảnh', btnFile: 'Chọn tệp', btnCapture: 'Chụp ảnh', btnRetake: 'Chụp lại', foreignOnlyNote: 'Khách Nhật Bản: Không cần điền các mục bên dưới'
+                title: 'Tự check-in', labelName: 'Họ và tên', labelNationality: 'Quốc tịch', labelBirthdate: 'Ngày sinh', labelNights: 'Số đêm', labelPhone: 'Số điện thoại', labelAddress: 'Địa chỉ', labelDocType: 'Loại giấy tờ', labelPassport: 'Số hộ chiếu', labelPhoto: 'Ảnh ID', btnNext: 'Tiếp theo', btnBack: 'Quay lại', btnSubmit: 'Hoàn tất', required: 'Bắt buộc', noteId: 'Khách nước ngoài cần chụp ảnh ID.', noteJp: 'Khách Nhật không cần chụp ảnh. Nhấn Hoàn tất.', btnCamera: 'Máy ảnh', btnFile: 'Tệp'
             }
         };
 
@@ -157,47 +182,34 @@
             btn.classList.add('active');
 
             document.getElementById('title').textContent = t.title;
-            document.getElementById('subtitle').textContent = t.subtitle;
-            document.getElementById('labelName').innerHTML = t.labelName + ' <span class="required">*</span>';
-            document.getElementById('name').placeholder = t.phName;
-            document.getElementById('labelNationality').innerHTML = t.labelNationality + ' <span class="required">*</span>';
-            document.getElementById('nationality').placeholder = t.phNationality;
-            document.getElementById('labelNights').innerHTML = t.labelNights + ' <span class="required">*</span>';
-            document.getElementById('labelPhone').innerHTML = t.labelPhone + ' <span class="required">*</span>';
-            document.getElementById('phone').placeholder = t.phPhone;
-            document.getElementById('labelAddress').innerHTML = t.labelAddress + ' <span class="required">*</span>';
-            document.getElementById('address').placeholder = t.phAddress;
-            document.getElementById('labelPassport').innerHTML = t.labelPassport + ' <span class="required">*</span>';
-            document.getElementById('passportNumber').placeholder = t.phPassport;
-            document.getElementById('labelPhoto').innerHTML = t.labelPhoto + ' <span class="required">*</span>';
-            document.getElementById('btnNext').textContent = t.btnNext;
-            document.getElementById('btnBack').textContent = t.btnBack;
-            document.getElementById('btnSubmit').textContent = t.btnSubmit;
-            document.getElementById('btnCapture').textContent = t.btnCapture; // 撮影ボタンの翻訳追加
-            document.getElementById('btnRetake').textContent = t.btnRetake;
-            document.getElementById('foreignOnlyNote').textContent = t.foreignOnlyNote;
-            document.getElementById('jpNoteTitle').textContent = t.jpNoteTitle;
-            document.getElementById('jpNoteBody').textContent = t.jpNoteBody;
-            document.getElementById('photoWarningTitle').textContent = t.photoWarningTitle;
-            document.getElementById('photoRequiredNote').textContent = t.photoRequiredNote;
-            document.getElementById('btnCamera').textContent = t.btnCamera;
-            document.getElementById('btnFile').textContent = t.btnFile;
-
-            const warn1 = document.getElementById('warningInput1');
-            const warn2 = document.getElementById('warningInput2');
-            if (lang === 'ja') { warn1.classList.add('hidden'); warn2.classList.add('hidden'); }
-            else { warn1.textContent = t.warning; warn2.textContent = t.warning; warn1.classList.remove('hidden'); warn2.classList.remove('hidden'); }
-            updateStepDisplay();
+            const ids = ['labelName', 'labelNationality', 'labelBirthdate', 'labelNights', 'labelPhone', 'labelAddress', 'labelDocType', 'labelPassport', 'labelPhoto', 'btnNext', 'btnBack', 'btnSubmit', 'noteId', 'noteJp', 'btnCamera', 'btnFile'];
+            ids.forEach(id => {
+                if (document.getElementById(id)) {
+                    const el = document.getElementById(id);
+                    if (el.tagName === 'SPAN' || el.tagName === 'BUTTON') el.textContent = t[id];
+                    else if (id.startsWith('label')) el.innerHTML = `${t[id]} <span class="required">*</span>`;
+                    else el.textContent = t[id];
+                }
+            });
         }
 
         function isJapanese() {
-            const nat = document.getElementById('nationality').value.toLowerCase().trim();
+            const val = document.getElementById('nationality').value.toLowerCase().trim();
             const jpList = ['日本', 'japan', '일본', 'nhật bản', 'にほん', 'にっぽん', 'jp'];
-            return jpList.includes(nat);
+            return jpList.includes(val);
         }
 
-        function nextStep() { if (validateCurrentStep()) { currentStep++; updateStepDisplay(); } }
-        function previousStep() { currentStep--; updateStepDisplay(); }
+        function nextStep() {
+            if (validateStep()) {
+                currentStep++;
+                updateStepDisplay();
+            }
+        }
+
+        function previousStep() {
+            currentStep--;
+            updateStepDisplay();
+        }
 
         function updateStepDisplay() {
             for (let i = 1; i <= 3; i++) {
@@ -207,64 +219,71 @@
             document.getElementById('backBtn').classList.toggle('hidden', currentStep === 1);
             document.getElementById('nextBtn').classList.toggle('hidden', currentStep === 3);
             document.getElementById('submitBtn').classList.toggle('hidden', currentStep !== 3);
-            if (currentStep === 2) { document.getElementById('foreignFields').classList.toggle('hidden', isJapanese()); }
+
             if (currentStep === 3) {
-                const isJp = isJapanese();
-                document.getElementById('photoSection').classList.toggle('hidden', isJp);
-                document.getElementById('japaneseNote').classList.toggle('hidden', !isJp);
+                const jp = isJapanese();
+                document.getElementById('foreignFields').classList.toggle('hidden', jp);
+                document.getElementById('japaneseNote').classList.toggle('hidden', !jp);
             }
         }
 
-        function validateCurrentStep() {
+        function validateStep() {
             const t = translations[currentLanguage];
-            let isValid = true;
             document.querySelectorAll('.error').forEach(e => e.classList.add('hidden'));
+            let valid = true;
+
             if (currentStep === 1) {
-                if (!document.getElementById('name').value.trim()) { showError('errorName', t.required); isValid = false; }
-                if (!document.getElementById('nationality').value.trim()) { showError('errorNationality', t.required); isValid = false; }
+                if (!document.getElementById('name').value.trim()) { showError('errorName', t.required); valid = false; }
+                if (!document.getElementById('nationality').value.trim()) { showError('errorNationality', t.required); valid = false; }
+                if (!document.getElementById('birthdate').value) { showError('errorBirthdate', t.required); valid = false; }
+            } else if (currentStep === 2) {
+                if (!document.getElementById('phone').value.trim()) { showError('errorPhone', t.required); valid = false; }
+                if (!document.getElementById('address').value.trim()) { showError('errorAddress', t.required); valid = false; }
+            } else if (currentStep === 3 && !isJapanese()) {
+                if (!document.getElementById('passportNumber').value.trim()) { showError('errorPassport', t.required); valid = false; }
+                if (!capturedImage) { showError('errorPhoto', t.required); valid = false; }
             }
-            if (currentStep === 2) {
-                if (!document.getElementById('phone').value.trim()) { showError('errorPhone', t.required); isValid = false; }
-                if (!document.getElementById('address').value.trim()) { showError('errorAddress', t.required); isValid = false; }
-                if (!isJapanese() && !document.getElementById('passportNumber').value.trim()) { showError('errorPassport', t.required); isValid = false; }
-            }
-            if (currentStep === 3 && !isJapanese() && !capturedImage) { showError('errorPhoto', t.required); isValid = false; }
-            return isValid;
+            return valid;
         }
 
-        function showError(id, msg) { const el = document.getElementById(id); el.textContent = msg; el.classList.remove('hidden'); }
+        function showError(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
 
         async function startCamera() {
             try {
                 videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
                 const video = document.getElementById('video');
                 video.srcObject = videoStream;
-                document.getElementById('cameraButtons').classList.add('hidden');
                 video.classList.remove('hidden');
                 document.getElementById('captureBtn').classList.remove('hidden');
-            } catch (err) { alert('Camera error: ' + err.message); }
+                document.getElementById('cameraButtons').classList.add('hidden');
+            } catch (err) { alert('Camera Error: ' + err.message); }
         }
 
         function capturePhoto() {
             const video = document.getElementById('video');
             const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
-            capturedImage = canvas.toDataURL('image/jpeg', 0.7);
+            capturedImage = canvas.toDataURL('image/jpeg', 0.8);
             document.getElementById('preview').src = capturedImage;
             document.getElementById('preview').classList.remove('hidden');
             document.getElementById('retakeBtn').classList.remove('hidden');
             video.classList.add('hidden');
             document.getElementById('captureBtn').classList.add('hidden');
-            if (videoStream) videoStream.getTracks().forEach(track => track.stop());
+            if (videoStream) videoStream.getTracks().forEach(t => t.stop());
         }
 
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    capturedImage = e.target.result;
+                reader.onload = (event) => {
+                    capturedImage = event.target.result;
                     document.getElementById('preview').src = capturedImage;
                     document.getElementById('preview').classList.remove('hidden');
                     document.getElementById('retakeBtn').classList.remove('hidden');
@@ -279,19 +298,19 @@
             document.getElementById('preview').classList.add('hidden');
             document.getElementById('retakeBtn').classList.add('hidden');
             document.getElementById('cameraButtons').classList.remove('hidden');
+            document.getElementById('fileInput').value = "";
         }
 
         async function submitForm() {
-            if (!validateCurrentStep()) return;
+            if (!validateStep()) return;
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
-            btn.innerHTML = 'Sending...';
+            btn.textContent = "Wait...";
 
-            const guestName = document.getElementById('name').value.trim();
-
-            const formData = {
-                name: guestName,
+            const payload = {
+                name: document.getElementById('name').value,
                 nationality: document.getElementById('nationality').value,
+                birthdate: document.getElementById('birthdate').value,
                 nights: document.getElementById('nights').value,
                 phone: document.getElementById('phone').value,
                 address: document.getElementById('address').value,
@@ -300,20 +319,23 @@
                 documentImage: capturedImage,
                 language: currentLanguage
             };
+
             try {
-                // 名簿保存 ＋ Telegram通知
-                await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(formData) });
-                
+                // GASへ送信
+                await fetch(GAS_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(payload)
+                });
+
                 document.getElementById('mainContent').classList.add('hidden');
                 document.getElementById('successScreen').classList.remove('hidden');
-                
-                // 次のページへジャンプ
-                setTimeout(() => {
-                    window.location.href = `${STEP2_URL}?name=${encodeURIComponent(guestName)}`;
-                }, 1500);
 
-            } catch (error) {
-                alert('Submit error: ' + error.message);
+                setTimeout(() => {
+                    window.location.href = `${NEXT_PAGE_URL}?name=${encodeURIComponent(payload.name)}`;
+                }, 1500);
+            } catch (err) {
+                alert('Submit Error: ' + err.message);
                 btn.disabled = false;
                 btn.textContent = translations[currentLanguage].btnSubmit;
             }
@@ -321,4 +343,3 @@
     </script>
 </body>
 </html>
-
