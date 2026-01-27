@@ -172,7 +172,7 @@
         const translations = {
             ja: { title: 'セルフチェックイン', labelName: 'お名前', labelNationality: '国籍', labelBirthdate: '生年月日', labelNights: '宿泊数', labelPhone: '電話番号', labelAddress: '住所', labelDocType: '証明書の種類', labelPassport: '番号', labelPhoto: '身分証の写真', btnNext: '次へ', btnBack: '戻る', btnSubmit: '完了', btnRetake: '撮り直し', required: '必須項目です', noteId: '外国籍の方は身分証の撮影が必要です。', noteJp: '日本人の方は写真撮影不要です。そのまま完了ボタンを押してください。', btnCamera: 'カメラ', btnFile: 'ファイル' },
             en: { title: 'Self Check-in', labelName: 'Full Name', labelNationality: 'Nationality', labelBirthdate: 'Birthdate', labelNights: 'Nights', labelPhone: 'Phone Number', labelAddress: 'Address', labelDocType: 'Doc Type', labelPassport: 'ID Number', labelPhoto: 'ID Photo', btnNext: 'Next', btnBack: 'Back', btnSubmit: 'Finish', btnRetake: 'Retake', required: 'Required', noteId: 'Non-Japanese guests: Please provide ID photo.', noteJp: 'Japanese citizens do not need an ID photo. Click Finish.', btnCamera: 'Camera', btnFile: 'File' },
-            zh: { title: '自助入住', labelName: '姓名', labelNationality: '国籍', labelBirthdate: '出生日期', labelNights: '晚数', labelPhone: '电话', labelAddress: '地址', labelDocType: '证件类型', labelPassport: '证件号', labelPhoto: '证件照', btnNext: '下一步', btnBack: '返回', btnSubmit: '完成', btnRetake: '重拍', required: '必填', noteId: '外国籍旅客需要拍摄证件。', noteJp: '日本籍旅客无需拍摄。直接点击完成。', btnCamera: '相机', btnFile: '文件' },
+            zh: { title: '自助入住', labelName: '姓名', labelNationality: '国籍', labelBirthdate: '出生日期', labelNights: '晚数', labelPhone: '電話', labelAddress: '地址', labelDocType: '证件类型', labelPassport: '证件号', labelPhoto: '证件照', btnNext: '下一步', btnBack: '返回', btnSubmit: '完成', btnRetake: '重拍', required: '必填', noteId: '外国籍旅客需要拍摄证件。', noteJp: '日本籍旅客无需拍摄。直接点击完成。', btnCamera: '相机', btnFile: '文件' },
             ko: { title: '셀프 체크인', labelName: '성함', labelNationality: '국적', labelBirthdate: '생년월일', labelNights: '숙박 일수', labelPhone: '전화번호', labelAddress: '주소', labelDocType: '신분증 종류', labelPassport: '번호', labelPhoto: '신분증 사진', btnNext: '다음', btnBack: '이전', btnSubmit: '완료', btnRetake: '다시 찍기', required: '필수', noteId: '외국인 고객은 신분증 촬영이 필요합니다.', noteJp: '일본인 고객은 촬영이 필요 없습니다. 완료를 눌러주세요.', btnCamera: '카메라', btnFile: '파일' },
             vi: { title: 'Tự check-in', labelName: 'Họ và tên', labelNationality: 'Quốc tịch', labelBirthdate: 'Ngày sinh', labelNights: 'Số đêm', labelPhone: 'Số điện thoại', labelAddress: 'Địa chỉ', labelDocType: 'Giấy tờ', labelPassport: 'Số ID', labelPhoto: 'Ảnh ID', btnNext: 'Tiếp theo', btnBack: 'Quay lại', btnSubmit: 'Hoàn tất', btnRetake: 'Chụp lại', required: 'Bắt buộc', noteId: 'Khách nước ngoài cần chụp ảnh ID.', noteJp: 'Khách Nhật không cần chụp ảnh. Nhấn Hoàn tất.', btnCamera: 'Máy ảnh', btnFile: 'Tệp' }
         };
@@ -346,10 +346,21 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="animate-pulse">Processing...</span>';
 
+            // --- 年齢の自動計算 ---
+            const birthValue = document.getElementById('birthdate').value;
+            const birthDate = new Date(birthValue);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
             const payload = {
                 name: document.getElementById('name').value,
                 nationality: document.getElementById('nationality').value,
-                birthdate: document.getElementById('birthdate').value,
+                birthdate: birthValue,
+                age: age, // 自動計算した年齢を追加
                 nights: document.getElementById('nights').value,
                 phone: document.getElementById('phone').value,
                 address: document.getElementById('address').value,
