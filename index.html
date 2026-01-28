@@ -62,19 +62,19 @@
 
             <form id="checkinForm">
                 <div id="stepContent1">
-                    <div class="warning-box hidden" id="warningInput1"></div>
+                    <div class="warning-box" id="warningInput1"></div>
                     <div class="form-group"><label id="labelName">お名前 <span class="required">*</span></label><input type="text" id="name" placeholder="Yamada Taro"><div class="error hidden" id="errorName"></div></div>
                     <div class="form-group"><label id="labelNationality">国籍 <span class="required">*</span></label><input type="text" id="nationality" placeholder="e.g. Japan, USA..."><div class="error hidden" id="errorNationality"></div></div>
                     <div class="form-group">
                         <label id="labelBirthDate">生年月日 <span class="required">*</span></label>
-                        <input type="date" id="birthDate">
+                        <input type="tel" id="birthDate" placeholder="1999/02/04" maxlength="10">
                         <div class="error hidden" id="errorBirthDate"></div>
                     </div>
                     <div class="form-group"><label id="labelNights">宿泊日数 <span class="required">*</span></label><input type="number" id="nights" value="1" min="1"></div>
                 </div>
 
                 <div id="stepContent2" class="hidden">
-                    <div class="warning-box hidden" id="warningInput2"></div>
+                    <div class="warning-box" id="warningInput2"></div>
                     <div class="form-group"><label id="labelPhone">電話番号 <span class="required">*</span></label><input type="tel" id="phone" placeholder="090-1234-5678"><div class="error hidden" id="errorPhone"></div></div>
                     <div class="form-group"><label id="labelAddress">ご住所 <span class="required">*</span></label><input type="text" id="address" placeholder="1-1-1 Shibuya, Tokyo..."><div class="error hidden" id="errorAddress"></div></div>
                     <div id="foreignFields" class="hidden">
@@ -118,10 +118,9 @@
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbzbPQO-xcU7ynpWB_U4cy2UbWWY7rx3KMCsLMQ1RXFOfrsV7WD5qWpWXelsXqYz8rCN/exec';
         const STEP2_URL = 'https://script.google.com/macros/s/AKfycbwxIJmU0kZMeMhaUcp2QsCLHv74Eujg-c9H1vBKvDEgwZd_Tri4mb-hJcb69fDrID_-Sw/exec';
         
-        // ★ プレースホルダを全言語で英語（英字）に統一しました
         const translations = {
             ja: {
-                title: 'セルフチェックイン', subtitle: 'ようこそ！', warning: '', labelName: 'お名前', phName: 'Yamada Taro', labelNationality: '国籍', phNationality: 'e.g. Japan, USA...', labelNights: '宿泊日数', labelPhone: '電話番号', phPhone: '090-1234-5678', labelAddress: 'ご住所', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'パスポート番号', phPassport: 'AB1234567', btnNext: '次へ', btnBack: '戻る', btnSubmit: 'チェックイン完了', required: '必須項目です',
+                title: 'セルフチェックイン', subtitle: 'ようこそ！', warning: '※日本語または英字で入力してください', labelName: 'お名前', phName: 'Yamada Taro', labelNationality: '国籍', phNationality: 'e.g. Japan, USA...', labelNights: '宿泊日数', labelPhone: '電話番号', phPhone: '090-1234-5678', labelAddress: 'ご住所', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'パスポート番号', phPassport: 'AB1234567', btnNext: '次へ', btnBack: '戻る', btnSubmit: 'チェックイン完了', required: '必須項目です',
                 jpNoteTitle: '日本人の方へ', jpNoteBody: '身分証明書の写真撮影は不要です。「チェックイン完了」ボタンを押してください。', photoWarningTitle: '外国籍の方のみ', photoRequiredNote: 'パスポートまたは在留カードの写真が必要です', 
                 labelPhoto: '身分証明書の写真', btnCamera: 'カメラで撮影', btnFile: 'ファイルから選択', btnCapture: '撮影', btnRetake: '撮り直し', foreignOnlyNote: '※日本人の方は、以下の入力は不要です', labelBirthDate: '生年月日' },
             en: {
@@ -181,10 +180,14 @@
             document.getElementById('btnCamera').textContent = t.btnCamera;
             document.getElementById('btnFile').textContent = t.btnFile;
 
+            // すべての言語で警告を表示
             const warn1 = document.getElementById('warningInput1');
             const warn2 = document.getElementById('warningInput2');
-            if (lang === 'ja') { warn1.classList.add('hidden'); warn2.classList.add('hidden'); }
-            else { warn1.textContent = t.warning; warn2.textContent = t.warning; warn1.classList.remove('hidden'); warn2.classList.remove('hidden'); }
+            warn1.textContent = t.warning;
+            warn2.textContent = t.warning;
+            warn1.classList.remove('hidden');
+            warn2.classList.remove('hidden');
+
             updateStepDisplay();
         }
 
@@ -311,6 +314,16 @@
                 btn.textContent = translations[currentLanguage].btnSubmit;
             }
         }
+
+        // --- ヒロのお気に入り：生年月日スラッシュ自動補完 ---
+        document.getElementById('birthDate').addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, ''); 
+            if (v.length > 4 && v.length <= 6) {
+                e.target.value = v.slice(0, 4) + '/' + v.slice(4);
+            } else if (v.length > 6) {
+                e.target.value = v.slice(0, 4) + '/' + v.slice(4, 6) + '/' + v.slice(6, 8);
+            }
+        });
     </script>
 </body>
 </html>
