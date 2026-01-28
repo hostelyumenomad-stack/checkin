@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -65,20 +63,20 @@
             <form id="checkinForm">
                 <div id="stepContent1">
                     <div class="warning-box hidden" id="warningInput1"></div>
-                    <div class="form-group"><label id="labelName">お名前 <span class="required">*</span></label><input type="text" id="name" placeholder="山田 太郎"><div class="error hidden" id="errorName"></div></div>
-                    <div class="form-group"><label id="labelNationality">国籍 <span class="required">*</span></label><input type="text" id="nationality" placeholder="例：日本、アメリカ、中国..."><div class="error hidden" id="errorNationality"></div></div>
+                    <div class="form-group"><label id="labelName">お名前 <span class="required">*</span></label><input type="text" id="name" placeholder="Yamada Taro"><div class="error hidden" id="errorName"></div></div>
+                    <div class="form-group"><label id="labelNationality">国籍 <span class="required">*</span></label><input type="text" id="nationality" placeholder="e.g. Japan, USA..."><div class="error hidden" id="errorNationality"></div></div>
                     <div class="form-group">
-    <label id="labelBirthDate">生年月日 <span class="required">*</span></label>
-<input type="tel" id="birthDate" placeholder="1999/02/04" maxlength="10">
-<div class="error hidden" id="errorBirthDate"></div>
-</div>
+                        <label id="labelBirthDate">生年月日 <span class="required">*</span></label>
+                        <input type="date" id="birthDate">
+                        <div class="error hidden" id="errorBirthDate"></div>
+                    </div>
                     <div class="form-group"><label id="labelNights">宿泊日数 <span class="required">*</span></label><input type="number" id="nights" value="1" min="1"></div>
                 </div>
 
                 <div id="stepContent2" class="hidden">
                     <div class="warning-box hidden" id="warningInput2"></div>
                     <div class="form-group"><label id="labelPhone">電話番号 <span class="required">*</span></label><input type="tel" id="phone" placeholder="090-1234-5678"><div class="error hidden" id="errorPhone"></div></div>
-                    <div class="form-group"><label id="labelAddress">ご住所 <span class="required">*</span></label><input type="text" id="address" placeholder="東京都渋谷区..."><div class="error hidden" id="errorAddress"></div></div>
+                    <div class="form-group"><label id="labelAddress">ご住所 <span class="required">*</span></label><input type="text" id="address" placeholder="1-1-1 Shibuya, Tokyo..."><div class="error hidden" id="errorAddress"></div></div>
                     <div id="foreignFields" class="hidden">
                         <div class="note">ℹ️ <span id="foreignOnlyNote">※日本人の方は、以下の入力は不要です</span></div>
                         <div class="form-group"><label id="labelDocType">身分証明書の種類</label><select id="documentType"><option value="passport">パスポート / Passport</option><option value="residenceCard">在留カード / Residence Card</option></select></div>
@@ -117,40 +115,34 @@
     </div>
 
     <script>
-        // ★ Telegram通知が含まれる最新のGAS URLに差し替え済みです
         const GAS_URL = 'https://script.google.com/macros/s/AKfycbzbPQO-xcU7ynpWB_U4cy2UbWWY7rx3KMCsLMQ1RXFOfrsV7WD5qWpWXelsXqYz8rCN/exec';
-
-
-       const STEP2_URL = 'https://script.google.com/macros/s/AKfycbwxIJmU0kZMeMhaUcp2QsCLHv74Eujg-c9H1vBKvDEgwZd_Tri4mb-hJcb69fDrID_-Sw/exec';
+        const STEP2_URL = 'https://script.google.com/macros/s/AKfycbwxIJmU0kZMeMhaUcp2QsCLHv74Eujg-c9H1vBKvDEgwZd_Tri4mb-hJcb69fDrID_-Sw/exec';
         
+        // ★ プレースホルダを全言語で英語（英字）に統一しました
         const translations = {
             ja: {
-                title: 'セルフチェックイン', subtitle: 'ようこそ！', warning: '', labelName: 'お名前', phName: '山田 太郎', labelNationality: '国籍', phNationality: '例：日本、アメリカ、中国...', labelNights: '宿泊日数', labelPhone: '電話番号', phPhone: '090-1234-5678', labelAddress: 'ご住所', phAddress: '東京都渋谷区...', labelPassport: 'パスポート番号', phPassport: 'AB1234567', btnNext: '次へ', btnBack: '戻る', btnSubmit: 'チェックイン完了', required: '必須項目です',
+                title: 'セルフチェックイン', subtitle: 'ようこそ！', warning: '', labelName: 'お名前', phName: 'Yamada Taro', labelNationality: '国籍', phNationality: 'e.g. Japan, USA...', labelNights: '宿泊日数', labelPhone: '電話番号', phPhone: '090-1234-5678', labelAddress: 'ご住所', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'パスポート番号', phPassport: 'AB1234567', btnNext: '次へ', btnBack: '戻る', btnSubmit: 'チェックイン完了', required: '必須項目です',
                 jpNoteTitle: '日本人の方へ', jpNoteBody: '身分証明書の写真撮影は不要です。「チェックイン完了」ボタンを押してください。', photoWarningTitle: '外国籍の方のみ', photoRequiredNote: 'パスポートまたは在留カードの写真が必要です', 
-                labelPhoto: '身分証明書の写真', btnCamera: 'カメラで撮影', btnFile: 'ファイルから選択', btnCapture: '撮影', btnRetake: '撮り直し', foreignOnlyNote: '※日本人の方は、以下の入力は不要です'
-           ,labelBirthDate: '生年月日' },
+                labelPhoto: '身分証明書の写真', btnCamera: 'カメラで撮影', btnFile: 'ファイルから選択', btnCapture: '撮影', btnRetake: '撮り直し', foreignOnlyNote: '※日本人の方は、以下の入力は不要です', labelBirthDate: '生年月日' },
             en: {
-                title: 'Self Check-in', subtitle: 'Welcome!', warning: 'Please enter in English, or Japanese', labelName: 'Full Name', phName: 'Bob Marley', labelNationality: 'Nationality', phNationality: 'e.g. USA, UK, China...', labelNights: 'Number of Nights', labelPhone: 'Phone Number', phPhone: '+1-234-567-890', labelAddress: 'Address', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'Passport Number', phPassport: 'AB1234567', btnNext: 'Next', btnBack: 'Back', btnSubmit: 'Complete Check-in', required: 'Required',
+                title: 'Self Check-in', subtitle: 'Welcome!', warning: 'Please enter in English, or Japanese', labelName: 'Full Name', phName: 'Bob Marley', labelNationality: 'Nationality', phNationality: 'e.g. USA, UK, Japan...', labelNights: 'Number of Nights', labelPhone: 'Phone Number', phPhone: '+1-234-567-890', labelAddress: 'Address', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'Passport Number', phPassport: 'AB1234567', btnNext: 'Next', btnBack: 'Back', btnSubmit: 'Complete Check-in', required: 'Required',
                 jpNoteTitle: 'For Japanese Guests', jpNoteBody: 'Photo ID is not required for Japanese citizens. Please click "Complete Check-in".', photoWarningTitle: 'Foreign Guests Only', photoRequiredNote: 'A photo of your passport or residence card is required.', 
-                labelPhoto: 'Photo of ID', btnCamera: 'Take Photo', btnFile: 'Choose File', btnCapture: 'Capture', btnRetake: 'Retake', foreignOnlyNote: 'Japanese guests: Fields below are not required',
-           labelBirthDate: 'Date of Birth' },
+                labelPhoto: 'Photo of ID', btnCamera: 'Take Photo', btnFile: 'Choose File', btnCapture: 'Capture', btnRetake: 'Retake', foreignOnlyNote: 'Japanese guests: Fields below are not required', labelBirthDate: 'Date of Birth' },
             zh: {
-                title: '自助入住', subtitle: '欢迎！', warning: '请输入数字、字母或日语', labelName: '姓名', phName: 'Bob Marley', labelNationality: '国籍', phNationality: '例如：中国、美国、日本...', labelNights: '入住晚数', labelPhone: '电话号码', phPhone: '138-0000-0000', labelAddress: '地址', phAddress: '东京都涩谷区...', labelPassport: '护照号码', phPassport: 'AB1234567', btnNext: '下一步', btnBack: '返回', btnSubmit: '完成入住', required: '必填项',
+                title: '自助入住', subtitle: '欢迎！', warning: '请输入数字、英文字母或日语', labelName: '姓名', phName: 'Bob Marley', labelNationality: '国籍', phNationality: 'e.g. China, USA, Japan...', labelNights: '入住晚数', labelPhone: '电话号码', phPhone: '138-0000-0000', labelAddress: '地址', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: '护照号码', phPassport: 'AB1234567', btnNext: '下一步', btnBack: '返回', btnSubmit: '完成入住', required: '必填项',
                 jpNoteTitle: '日本籍客人', jpNoteBody: '日本公民不需要身份证照片。请点击“完成入住”。', photoWarningTitle: '仅限外国籍客人', photoRequiredNote: '需要护照或在留卡的照片。', 
-                labelPhoto: '身份证件照片', btnCamera: '拍照', btnFile: '选择文件', btnCapture: '拍照', btnRetake: '重拍', foreignOnlyNote: '日本客人：不需要填写以下内容'
-           ,labelBirthDate: '出生日期' },
+                labelPhoto: '身份证件照片', btnCamera: '拍照', btnFile: '选择文件', btnCapture: '拍照', btnRetake: '重拍', foreignOnlyNote: '日本客人：不需要填写以下内容', labelBirthDate: '出生日期' },
             ko: {
-                title: '셀프 체크인', subtitle: '환영합니다!', warning: '숫자, 알파벳 또는 일본어로 입력해 주세요', labelName: '이름', phName: 'Bob Marley', labelNationality: '국적', phNationality: '예: 한국, 미국, 일본...', labelNights: '숙박 일수', labelPhone: '전화번호', phPhone: '010-1234-5678', labelAddress: '주소', phAddress: '도쿄도 시부야구...', labelPassport: '여권 번号', phPassport: 'AB1234567', btnNext: '다음', btnBack: '이전', btnSubmit: '체크인 완료', required: '필수 항목',
+                title: '셀프 체크인', subtitle: '환영합니다!', warning: '숫자, 알파벳 또는 일본어로 입력해 주세요', labelName: '이름', phName: 'Bob Marley', labelNationality: '국적', phNationality: 'e.g. Korea, USA, Japan...', labelNights: '숙박 일수', labelPhone: '전화번호', phPhone: '010-1234-5678', labelAddress: '주소', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: '여권 번호', phPassport: 'AB1234567', btnNext: '다음', btnBack: '이전', btnSubmit: '체크인 완료', required: '필수 항목',
                 jpNoteTitle: '일본인 고객의 경우', jpNoteBody: '일본 시민은 신분증 사진이 필요하지 않습니다. "체크인 완료"를 클릭하십시오.', photoWarningTitle: '외국인 고객 전용', photoRequiredNote: '여권 또는 재류 카드의 사진이 필요합니다.', 
-                labelPhoto: '신분증 사진', btnCamera: '사진 촬영', btnFile: '파일 선택', btnCapture: '촬영', btnRetake: '다시 촬영', foreignOnlyNote: '일본인 고객: 아래 항목은 입력할 필요가 없습니다'
-           ,labelBirthDate: '생년월일' },
+                labelPhoto: '신분증 사진', btnCamera: '사진 촬영', btnFile: '파일 선택', btnCapture: '촬영', btnRetake: '다시 촬영', foreignOnlyNote: '일본인 고객: 아래 항목은 입력할 필요가 없습니다', labelBirthDate: '생년월일' },
             vi: {
-                title: 'Tự check-in', subtitle: 'Chào mừng!', warning: 'Vui lòng nhập bằng số, bảng chữ cái hoặc tiếng Nhật', labelName: 'Họ và Tên', phName: 'Bob Marley', labelNationality: 'Quốc tịch', phNationality: 'VD: Việt Nam, Mỹ, Nhật Bản...', labelNights: 'Số đêm lưu trú', labelPhone: 'Số điện thoại', phPhone: '090-1234-5678', labelAddress: 'Địa chỉ', phAddress: 'Tokyo-to, Shibuya-ku...', labelPassport: 'Số hộ chiếu', phPassport: 'AB1234567', btnNext: 'Tiếp theo', btnBack: 'Quay lại', btnSubmit: 'Hoàn tất', required: 'Bắt buộc',
+                title: 'Tự check-in', subtitle: 'Chào mừng!', warning: 'Vui lòng nhập bằng số, bảng chữ cái hoặc tiếng Nhật', labelName: 'Họ và Tên', phName: 'Bob Marley', labelNationality: 'Quốc tịch', phNationality: 'e.g. Vietnam, USA, Japan...', labelNights: 'Số đêm lưu trú', labelPhone: 'Số điện thoại', phPhone: '090-1234-5678', labelAddress: 'Địa chỉ', phAddress: '1-1-1 Shibuya, Tokyo...', labelPassport: 'Số hộ chiếu', phPassport: 'AB1234567', btnNext: 'Tiếp theo', btnBack: 'Quay lại', btnSubmit: 'Hoàn tất', required: 'Bắt buộc',
                 jpNoteTitle: 'Dành cho khách Nhật Bản', jpNoteBody: 'Công dân Nhật Bản không cần ảnh ID. Vui lòng nhấp vào "Hoàn tất".', photoWarningTitle: 'Chỉ dành cho khách nước ngoài', photoRequiredNote: 'Yêu cầu ảnh hộ chiếu hoặc thẻ ngoại kiều.', 
-                labelPhoto: 'Ảnh chụp giấy tờ tùy thân', btnCamera: 'Chụp ảnh', btnFile: 'Chọn tệp', btnCapture: 'Chụp ảnh', btnRetake: 'Chụp lại', foreignOnlyNote: 'Khách Nhật Bản: Không cần điền các mục bên dưới'
-           ,labelBirthDate: 'Ngày sinh' }
+                labelPhoto: 'Ảnh chụp giấy tờ tùy thân', btnCamera: 'Chụp ảnh', btnFile: 'Chọn tệp', btnCapture: 'Chụp ảnh', btnRetake: 'Chụp lại', foreignOnlyNote: 'Khách Nhật Bản: Không cần điền các mục bên dưới', labelBirthDate: 'Ngày sinh' }
         };
-let currentStep = 1;
+
+        let currentStep = 1;
         let currentLanguage = 'ja';
         let capturedImage = null;
         let videoStream = null;
@@ -179,7 +171,7 @@ let currentStep = 1;
             document.getElementById('btnNext').textContent = t.btnNext;
             document.getElementById('btnBack').textContent = t.btnBack;
             document.getElementById('btnSubmit').textContent = t.btnSubmit;
-            document.getElementById('btnCapture').textContent = t.btnCapture; // 撮影ボタンの翻訳追加
+            document.getElementById('btnCapture').textContent = t.btnCapture;
             document.getElementById('btnRetake').textContent = t.btnRetake;
             document.getElementById('foreignOnlyNote').textContent = t.foreignOnlyNote;
             document.getElementById('jpNoteTitle').textContent = t.jpNoteTitle;
@@ -228,8 +220,8 @@ let currentStep = 1;
             if (currentStep === 1) {
                 if (!document.getElementById('name').value.trim()) { showError('errorName', t.required); isValid = false; }
                 if (!document.getElementById('nationality').value.trim()) { showError('errorNationality', t.required); isValid = false; }
-            if (!document.getElementById('birthDate').value) { showError('errorBirthDate', t.required); isValid = false; }}
-            
+                if (!document.getElementById('birthDate').value) { showError('errorBirthDate', t.required); isValid = false; }
+            }
             if (currentStep === 2) {
                 if (!document.getElementById('phone').value.trim()) { showError('errorPhone', t.required); isValid = false; }
                 if (!document.getElementById('address').value.trim()) { showError('errorAddress', t.required); isValid = false; }
@@ -293,9 +285,7 @@ let currentStep = 1;
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerHTML = 'Sending...';
-
             const guestName = document.getElementById('name').value.trim();
-
             const formData = {
                 name: guestName,
                 nationality: document.getElementById('nationality').value,
@@ -309,37 +299,18 @@ let currentStep = 1;
                 language: currentLanguage
             };
             try {
-                // 名簿保存 ＋ Telegram通知
                 await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(formData) });
-                
                 document.getElementById('mainContent').classList.add('hidden');
                 document.getElementById('successScreen').classList.remove('hidden');
-                
-                // 次のページへジャンプ
                 setTimeout(() => {
                     window.location.href = `${STEP2_URL}?name=${encodeURIComponent(guestName)}`;
                 }, 1500);
-
             } catch (error) {
                 alert('Submit error: ' + error.message);
                 btn.disabled = false;
                 btn.textContent = translations[currentLanguage].btnSubmit;
             }
         }
-        // --- ここから下が新しく追加する部分 ---
-        document.getElementById('birthDate').addEventListener('input', function(e) {
-            let v = e.target.value.replace(/\D/g, ''); // 数字以外を消す
-            if (v.length > 4 && v.length <= 6) {
-                e.target.value = v.slice(0, 4) + '/' + v.slice(4);
-            } else if (v.length > 6) {
-                e.target.value = v.slice(0, 4) + '/' + v.slice(4, 6) + '/' + v.slice(6, 8);
-            }
-        });
-        // --- ここまで ---
     </script>
 </body>
 </html>
-
-
-
-
