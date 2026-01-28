@@ -69,8 +69,8 @@
                     <div class="form-group"><label id="labelNationality">国籍 <span class="required">*</span></label><input type="text" id="nationality" placeholder="例：日本、アメリカ、中国..."><div class="error hidden" id="errorNationality"></div></div>
                     <div class="form-group">
     <label id="labelBirthDate">生年月日 <span class="required">*</span></label>
-    <input type="date" id="birthDate">
-    <div class="error hidden" id="errorBirthDate"></div>
+<input type="tel" id="birthDate" placeholder="1999/02/04" maxlength="10">
+<div class="error hidden" id="errorBirthDate"></div>
 </div>
                     <div class="form-group"><label id="labelNights">宿泊日数 <span class="required">*</span></label><input type="number" id="nights" value="1" min="1"></div>
                 </div>
@@ -326,9 +326,20 @@ let currentStep = 1;
                 btn.textContent = translations[currentLanguage].btnSubmit;
             }
         }
+        // --- ここから下が新しく追加する部分 ---
+        document.getElementById('birthDate').addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, ''); // 数字以外を消す
+            if (v.length > 4 && v.length <= 6) {
+                e.target.value = v.slice(0, 4) + '/' + v.slice(4);
+            } else if (v.length > 6) {
+                e.target.value = v.slice(0, 4) + '/' + v.slice(4, 6) + '/' + v.slice(6, 8);
+            }
+        });
+        // --- ここまで ---
     </script>
 </body>
 </html>
+
 
 
 
