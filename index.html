@@ -252,15 +252,43 @@
             } catch (err) { alert('Camera error: ' + err.message); }
         }
 
+       // 写真を圧縮して保存する共通の「圧縮機」
+        function compressAndSetImage(source) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                // 商売用ならこのサイズで十分。長辺を1280pxに抑える
+                const max_size = 1280;
+                if (width > height) {
+                    if (width > max_size) { height *= max_size / width; width = max_size; }
+                } else {
+                    if (height > max_size) { width *= max_size / height; height = max_size; }
+                }
+                canvas.width = width; canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                
+                // 画質を0.6（60%）まで落として軽量化。これでGoogleの門番も通してくれる
+                capturedImage = canvas.toDataURL('image/jpeg', 0.6);
+                
+                document.getElementById('preview').src = capturedImage;
+                document.getElementById('preview').classList.remove('hidden');
+                document.getElementById('retakeBtn').classList.remove('hidden');
+            };
+            img.src = source;
+        }
+
         function capturePhoto() {
             const video = document.getElementById('video');
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth; canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
-            capturedImage = canvas.toDataURL('image/jpeg', 0.7);
-            document.getElementById('preview').src = capturedImage;
-            document.getElementById('preview').classList.remove('hidden');
-            document.getElementById('retakeBtn').classList.remove('hidden');
+            
+            // 撮影した瞬間に圧縮にかける
+            compressAndSetImage(canvas.toDataURL('image/jpeg'));
+            
             video.classList.add('hidden');
             document.getElementById('captureBtn').classList.add('hidden');
             if (videoStream) videoStream.getTracks().forEach(track => track.stop());
@@ -271,15 +299,15 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    capturedImage = e.target.result;
-                    document.getElementById('preview').src = capturedImage;
-                    document.getElementById('preview').classList.remove('hidden');
-                    document.getElementById('retakeBtn').classList.remove('hidden');
+                    // ファイルを選んだ瞬間に圧縮にかける
+                    compressAndSetImage(e.target.result);
                     document.getElementById('cameraButtons').classList.add('hidden');
                 };
                 reader.readAsDataURL(file);
             }
         }
+
+       
 
         function retakePhoto() {
             capturedImage = null;
@@ -352,4 +380,5 @@
     </script>
 </body>
 </html>
+
 
