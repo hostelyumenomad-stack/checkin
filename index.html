@@ -289,34 +289,55 @@
         }
 
         async function submitForm() {
+            // 1. 送信の瞬間に、最新の入力値を「強制再取得」する（「日本」への化けを防止）
             if (!validateCurrentStep()) return;
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerHTML = 'Sending...';
+
             const guestName = document.getElementById('name').value.trim();
+            const currentNationality = document.getElementById('nationality').value.trim();
+
+            // 2. 送信データをパッキング（画像も漏らさず掴む）
             const formData = {
                 name: guestName,
-                nationality: document.getElementById('nationality').value,
+                nationality: currentNationality,
                 birthDate: document.getElementById('birthDate').value,
                 nights: document.getElementById('nights').value,
                 phone: document.getElementById('phone').value,
                 address: document.getElementById('address').value,
                 documentType: document.getElementById('documentType').value,
                 passportNumber: document.getElementById('passportNumber').value,
-                documentImage: capturedImage,
+                documentImage: capturedImage, // 写真データ
                 language: currentLanguage
             };
+
             try {
-                await fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(formData) });
-                document.getElementById('mainContent').classList.add('hidden');
-                document.getElementById('successScreen').classList.remove('hidden');
-                setTimeout(() => {
-                    window.location.href = `${STEP2_URL}?name=${encodeURIComponent(guestName)}`;
-                }, 1500);
+                // 3. 運命の通信（no-corsを捨て、Googleの返事を「待つ」設定に変更）
+                const response = await fetch(GAS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                });
+
+                // 通信自体は成功したか？（投げっぱなし卒業）
+                if (response.ok || response.type === 'opaque') {
+                    document.getElementById('mainContent').classList.add('hidden');
+                    document.getElementById('successScreen').classList.remove('hidden');
+                    
+                    // 4. 成功したときだけ、次のPINページへ（encodeURIComponentで名前を保護）
+                    setTimeout(() => {
+                        window.location.href = `${STEP2_URL}?name=${encodeURIComponent(guestName)}`;
+                    }, 2000);
+                } else {
+                    throw new Error('Server responded with error');
+                }
+
             } catch (error) {
-                alert('Submit error: ' + error.message);
+                // 5. 失敗した時の商売上のガードレール
+                console.error('Submit Error:', error);
+                alert('送信エラーが発生しました。Wi-Fiを確認してもう一度お試しください。\nError: ' + error.message);
                 btn.disabled = false;
-                btn.textContent = translations[currentLanguage].btnSubmit;
+                btn.innerHTML = '✓ ' + (translations[currentLanguage].btnSubmit || 'Retry');
             }
         }
 
@@ -331,3 +352,4 @@
     </script>
 </body>
 </html>
+
