@@ -290,6 +290,18 @@
             btn.disabled = true;
             btn.innerHTML = 'Sending...';
 
+          // --- ここから追加 ---
+if (!document.getElementById('nights').value) {
+    alert("Please enter the number of nights / 宿泊数を入力してください");
+   // --- ここを足す ---
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+    // ----------------
+    
+    return; // ここで送信を強制終了させる
+}
+// --- ここまで追加 ---
+
             const payload = {
                 name: document.getElementById('name').value.trim(),
                 nationality: document.getElementById('nationality').value.trim(),
@@ -333,6 +345,7 @@
     </script>
 </body>
 </html>
+
 
 
 
