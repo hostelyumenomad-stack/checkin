@@ -67,7 +67,7 @@
                     <div class="form-group"><label id="labelName">お名前 <span class="required">*</span></label><input type="text" id="name" placeholder="Yamada Taro"><div class="error hidden" id="errorName"></div></div>
                     <div class="form-group"><label id="labelNationality">国籍 <span class="required">*</span></label><input type="text" id="nationality" placeholder="e.g. Japan, USA..."><div class="error hidden" id="errorNationality"></div></div>
                     <div class="form-group"><label id="labelBirthDate">生年月日 <span class="required">*</span></label><input type="tel" id="birthDate" placeholder="1999/02/04" maxlength="10"><div class="error hidden" id="errorBirthDate"></div></div>
-                    <div class="form-group"><label id="labelNights">宿泊日数 <span class="required">*</span></label><input type="number" id="nights" value="1" min="1"></div>
+                    <div class="form-group"><label id="labelNights">宿泊日数 <span class="required">*</span></label><input type="number" id="nights" name="nights" min="1" required placeholder="e.g. 2"></div>
                 </div>
 
                 <div id="stepContent2" class="hidden">
@@ -333,6 +333,7 @@
     </script>
 </body>
 </html>
+
 
 
 
